@@ -19,18 +19,22 @@ time.sleep(10)  # <-- give you time to login manually (safer than storing passwo
 
 found = False  # Flag to indicate the target text was found
 # 2. Wait until submission is accepted
-while not found:
-    spans = driver.find_elements(By.TAG_NAME, "span")
-    for s in spans:
-        try:
-            if s.text.strip():
-                print("SPAN TEXT:", repr(s.text))
-            if "Would you like to challenge your friends?" in s.text:
-                print("Text found! Breaking loop.")
-                found = True
-                break
-        except StaleElementReferenceException:
-            print("Redirecting Message:")
+# Locate the button by CSS selector
+button_selector = "#codeshell-wrapper > div.clearfix.pmR.pmL.pmB.plT.fixed-hand1.codeshell-footer > div.pull-right > button.btn.btn-primary.bb-submit.ans-submit"
+
+try:
+    # Wait for the button to be clickable
+    button = WebDriverWait(driver, 20).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, button_selector))
+    )
+    print("Button is present and clickable.")
+
+    # Attach a click action (if you want to detect when *you* click it)
+    button.click()
+    print("Button was clicked!")
+    
+except Exception as e:
+    print("Error:", e)
 
 
 

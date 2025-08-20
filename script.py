@@ -56,9 +56,20 @@ while not found:
 # 2. Wait for CodeMirror editor to load and extract code
 try:
     code_mirror = WebDriverWait(driver, 20).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, "#codeshell-wrapper .CodeMirror-line"))
+        EC.presence_of_element_located((By.CSS_SELECTOR, "#codeshell-wrapper .CodeMirror"))
     )
-    code_content = code_mirror.text
+
+    # Each line of code is usually inside div.CodeMirror-line
+   # Get each line's text
+    lines = code_mirror.find_elements(By.CSS_SELECTOR, "div > pre")
+    code_lines = []
+
+    for line in lines:
+        text = line.text.strip()
+        code_lines.append(text)
+
+    # Join into final code
+    code_content = "\n".join(code_lines)
     print("✅ Extracted code:\n", code_content)
 except TimeoutException:
     print("❌ Code editor did not load in time")
@@ -93,5 +104,15 @@ except subprocess.CalledProcessError:
 
 
 # Push to correct branch
-subprocess.run(["git", "remote", "add", 'origin' "'https://github.com/HuongNguyen0828/HackerRank_SQL'"], check=True)
-subprocess.run(["git", "push", "origin", "main"], check=True)
+# Check existing remotes
+remotes = subprocess.run(["git", "remote"], capture_output=True, text=True)
+if "origin" in remotes.stdout.split():
+    print("⚠️ Remote 'origin' already exists, removing it...")
+    subprocess.run(["git", "remote", "remove", "origin"], check=True)
+
+# Add remote
+subprocess.run(["git", "remote", "add", "origin", "https://github.com/HuongNguyen0828/HackerRank_solutions"], check=True)
+print("✅ Remote 'origin' added successfully")
+
+# Push commit
+subprocess.run(["git", "push", "origin", "master"], check=True)

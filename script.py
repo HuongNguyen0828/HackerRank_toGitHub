@@ -22,19 +22,33 @@ found = False  # Flag to indicate the target text was found
 # Locate the button by CSS selector
 button_selector = "#codeshell-wrapper > div.clearfix.pmR.pmL.pmB.plT.fixed-hand1.codeshell-footer > div.pull-right > button.btn.btn-primary.bb-submit.ans-submit"
 
-try:
-    # Wait for the button to be clickable
-    button = WebDriverWait(driver, 20).until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, button_selector))
-    )
-    print("Button is present and clickable.")
+while not found:
+    try:
+        # Wait for the button to be clickable
+        button = WebDriverWait(driver, 20).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, button_selector))
+        )
+        print("Button is present and clickable.")
 
-    # Attach a click action (if you want to detect when *you* click it)
-    button.click()
-    print("Button was clicked!")
-    
-except Exception as e:
-    print("Error:", e)
+        # Inject JavaScript that attaches a click listener to the button
+        driver.execute_script("""
+            const btn = arguments[0];
+            btn.addEventListener("click", () => {
+                btn.setAttribute("data-was-clicked", "true");
+            });
+        """, button)
+
+        # Listening for the click 
+        while True:
+            clicked = button.get_attribute("data-was-clicked")
+            if clicked == "true":
+                print("Button was manually clicked!")
+                found = True
+                break
+            time.sleep(0.5)
+        
+    except Exception as e:
+        print("Error:", e)
 
 
 

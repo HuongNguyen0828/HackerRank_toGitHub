@@ -56,7 +56,7 @@ while not found:
 # 2. Wait for CodeMirror editor to load and extract code
 try:
     code_mirror = WebDriverWait(driver, 20).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, "#codeshell-wrapper .CodeMirror"))
+        EC.presence_of_element_located((By.CSS_SELECTOR, "#codeshell-wrapper .CodeMirror-line"))
     )
     code_content = code_mirror.text
     print("✅ Extracted code:\n", code_content)
@@ -65,21 +65,33 @@ except TimeoutException:
 
 
 
+# Creating folder and save file
+repo_path = "./HackerRank/SQL"
+os.makedirs(repo_path, exist_ok=True) 
+
+## Go inside of repo_path
+os.chdir(repo_path) 
+
+# Save code into file solution
+filename = "solution.txt"
+print("💾 File will be saved as:", filename)
+# --- 4. Save code --- 
+with open(filename, "w", encoding="utf-8") as f: 
+    f.write(code_content) 
+    print(f"💾 Saved code to {filename}")
 
 
 
 # Commit and push to GitHub
-
-# Creating folder
-repo_path = "./HackerRank/SQL"
-os.makedirs(repo_path, exist_ok=True) 
-os.chdir(repo_path)
-
+subprocess.run(["git", "init"], check=True)
 subprocess.run(["git", "add", "."], check=True)
 try:
     subprocess.run(["git", "commit", "-m", "Auto-update from HackerRank"], check=True)
 except subprocess.CalledProcessError:
     print("ℹ️ No changes to commit")
 
+
+
 # Push to correct branch
-subprocess.run(["git", "push", "origin", "master"], check=True)
+subprocess.run(["git", "remote", "add", 'origin' "'https://github.com/HuongNguyen0828/HackerRank_SQL'"], check=True)
+subprocess.run(["git", "push", "origin", "main"], check=True)

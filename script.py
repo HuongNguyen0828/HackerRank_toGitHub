@@ -41,18 +41,14 @@ except Exception as e:
 
 # 2. Wait for CodeMirror editor to load and extract code
 try:
-    # Locate the editor container
-    editor = driver.find_element(By.CSS_SELECTOR, "#codeshell-wrapper .CodeMirror-code")
-    
-    # Extract each line
-    code_lines = editor.find_elements(By.CSS_SELECTOR, "pre > span")
-    code_content = "\n".join([line.text for line in code_lines])
-    
-    print("==== Extracted Code ====")
-    print(code_content)
+    code_mirror = WebDriverWait(driver, 20).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, "#codeshell-wrapper .CodeMirror"))
+    )
+    code_content = code_mirror.text
+    print("✅ Extracted code:\n", code_content)
+except TimeoutException:
+    print("❌ Code editor did not load in time")
 
-except Exception as e:
-    print("Error while extracting code:", e)
 
 
 
@@ -60,12 +56,16 @@ except Exception as e:
 
 # Commit and push to GitHub
 
-repo_path = "./HackerRank"
+# Creating folder
+repo_path = "./HackerRank/SQL"
+os.makedirs(repo_path, exist_ok=True) 
 os.chdir(repo_path)
 
-subprocess.run(["git", "init"], check=True)  # in case repo not initialized
 subprocess.run(["git", "add", "."], check=True)
-subprocess.run(["git", "commit", "-m", "Auto-update from HackerRank"], check=True)
+try:
+    subprocess.run(["git", "commit", "-m", "Auto-update from HackerRank"], check=True)
+except subprocess.CalledProcessError:
+    print("ℹ️ No changes to commit")
 
 # Push to correct branch
 subprocess.run(["git", "push", "origin", "master"], check=True)

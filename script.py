@@ -80,24 +80,41 @@ except TimeoutException:
 repo_path = "./HackerRank/SQL"
 os.makedirs(repo_path, exist_ok=True) 
 
-## Go inside of repo_path
+## 1. Go inside of repo_path
 os.chdir(repo_path) 
 
 # Save code into file solution
-filename = "solution.txt"
+# 1. Extract file_name
+breadcrumb_spans = driver.find_elements(
+    By.CSS_SELECTOR,
+    "ol.community-breadcrumb li.breadcrumb-item span.breadcrumb-item-text"
+)
+
+# Take the last one
+last_span = breadcrumb_spans[-1]
+problem_name = last_span.text
+filename = problem_name + ".sql"
 print("💾 File will be saved as:", filename)
 # --- 4. Save code --- 
+# Extract lang: Locate the span inside the container by CSS selector
+span_element = driver.find_element(By.CSS_SELECTOR, "#s2id_select-lang span")
+language_text = '--' + span_element.text # adding language as command
+
+
 with open(filename, "w", encoding="utf-8") as f: 
+    f.write(language_text) # Adding languange on the top of the file
     f.write(code_content) 
     print(f"💾 Saved code to {filename}")
 
 
 
 # Commit and push to GitHub
+
+
 subprocess.run(["git", "init"], check=True)
 subprocess.run(["git", "add", "."], check=True)
 try:
-    subprocess.run(["git", "commit", "-m", "Auto-update from HackerRank"], check=True)
+    subprocess.run(["git", "commit", "-m", f"Auto-update adding {filename} from HackerRank"], check=True)
 except subprocess.CalledProcessError:
     print("ℹ️ No changes to commit")
 
@@ -107,12 +124,24 @@ except subprocess.CalledProcessError:
 # Check existing remotes
 remotes = subprocess.run(["git", "remote"], capture_output=True, text=True)
 if "origin" in remotes.stdout.split():
-    print("⚠️ Remote 'origin' already exists, removing it...")
-    subprocess.run(["git", "remote", "remove", "origin"], check=True)
+    print("⚠️ Remote 'origin' already exists, just push")
+    subprocess.run(["git", "push", "--set-upstream", "origin", "master"])
+    
 
-# Add remote
-subprocess.run(["git", "remote", "add", "origin", "https://github.com/HuongNguyen0828/HackerRank_solutions"], check=True)
-print("✅ Remote 'origin' added successfully")
+else: # Add remote
+    subprocess.run(["git", "remote", "add", "origin", "https://github.com/HuongNguyen0828/HackerRank_solutions"], check=True)
+    print("✅ Remote 'origin' added successfully")
+    # Push commit
+    subprocess.run(["git", "push", "origin", "master"], check=True)
 
-# Push commit
-subprocess.run(["git", "push", "origin", "master"], check=True)
+
+
+
+print("🎉 Script finished. Browser will remain open. Press Ctrl+C to exit manually.")
+
+# To keep browser sty
+try:
+    while True:
+        time.sleep(1)  # keep the Python process alive
+except KeyboardInterrupt:
+    print("Exiting...")  # user pressed Ctrl+C

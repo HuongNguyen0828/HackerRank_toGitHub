@@ -1,21 +1,13 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-import time, os
+import time, os, sys
 import subprocess
 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchWindowException
 from selenium.common.exceptions import StaleElementReferenceException
 
-
-
-# Start browser
-driver = webdriver.Edge()
-
-# 1. Open HackerRank & login
-driver.get("https://www.hackerrank.com/auth/login")
-time.sleep(10)  # <-- give you time to login manually (safer than storing password)
 
 # Creating folder and save file JUST 1 time 
 repo_path = "./HackerRank/SQL"
@@ -49,7 +41,7 @@ else:
     print(f"Remote '{remote_name}' added.")
 
 ## first push 
-subprocess.run(["git", " push", "-u", "origin", "master"])
+subprocess.run(["git", "push", "-u", "origin", "master"], check=True)
 # Commit and push to GitHub
 subprocess.run(["git", "add", "."], check=True)
 try:
@@ -57,13 +49,24 @@ try:
 except subprocess.CalledProcessError:
     pass
 
+# Start browser
+driver = webdriver.Edge()
+
 #### Detecting Submit button is clicked
 submit = False
 # To keep browser stay
 try:
+    # 1. Open HackerRank & login
+    driver.get("https://www.hackerrank.com/auth/login")
+    time.sleep(10)  # <-- give you time to login manually (safer than storing password)
     # keep the Python process alive
     while True:  
-        time.sleep(1) 
+        try: 
+            # Check if browser window is still open
+            driver.current_url
+        except:
+            print("Browser window closed by user")
+            break
         
         # REVERST button submit to be false
         submit = False # to come back to loop
@@ -162,6 +165,13 @@ try:
                 subprocess.run(["git", "push"], check=True)
             print("🎉 Script finished. Browser will remain open. Press Ctrl+C to exit manually.")
 
-
-except KeyboardInterrupt or driver.close():
-    print("Exiting...")  # user pressed Ctrl+C
+except KeyboardInterrupt:
+    print("Exiting...")
+except Exception as e:
+    print(f"Unexpected error: {e}")
+finally:
+    try:
+        driver.quit()
+    except:
+        pass
+    sys.exit(0)

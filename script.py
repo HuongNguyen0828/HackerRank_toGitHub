@@ -1,12 +1,13 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-import time, os, sys
+import time, os
 import subprocess
 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchWindowException
+from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import StaleElementReferenceException
+
 
 
 # Creating folder and save file JUST 1 time 
@@ -41,13 +42,14 @@ else:
     print(f"Remote '{remote_name}' added.")
 
 ## first push 
-subprocess.run(["git", "push", "-u", "origin", "master"], check=True)
+subprocess.run(["git", " push", "-u", "origin", "master"])
 # Commit and push to GitHub
 subprocess.run(["git", "add", "."], check=True)
 try:
     subprocess.run(["git", "commit", "-m", f"Add README.md"], check=True)
 except subprocess.CalledProcessError:
     pass
+
 
 # Start browser
 driver = webdriver.Edge()
@@ -56,18 +58,25 @@ driver = webdriver.Edge()
 submit = False
 # To keep browser stay
 try:
+     # Clear cookies first
+    driver.delete_all_cookies()
+
     # 1. Open HackerRank & login
     driver.get("https://www.hackerrank.com/auth/login")
-    time.sleep(10)  # <-- give you time to login manually (safer than storing password)
+    time.sleep(60)  # <-- give you time to login manually (safer than storing password)
+
     # keep the Python process alive
     while True:  
-        try: 
-            # Check if browser window is still open
+        time.sleep(1) 
+
+        # to handle error gracially when browser is closed manually by user
+        try:
             driver.current_url
         except:
             print("Browser window closed by user")
             break
-        
+
+
         # REVERST button submit to be false
         submit = False # to come back to loop
         # Locate the button by CSS selector
@@ -165,8 +174,9 @@ try:
                 subprocess.run(["git", "push"], check=True)
             print("🎉 Script finished. Browser will remain open. Press Ctrl+C to exit manually.")
 
+
 except KeyboardInterrupt:
-    print("Exiting...")
+    print("Exiting...")  # user pressed Ctrl+C
 except Exception as e:
     print(f"Unexpected error: {e}")
 finally:

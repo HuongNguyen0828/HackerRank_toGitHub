@@ -33,7 +33,7 @@ This ensures all solutions are automatically pushed to GiHub in the same time us
 
 ┣ 📂 HackerRank/ # Folder containing solved HackerRank scripts
 
-      ┣ 📂 SQL/ # Folder containing solved SQL scripts
+      ┣ 📂 SQL/ # Folder containing solved SQL scripts and commits
   
 ┣ 📜 script.py # Main Python automation script
 

@@ -30,10 +30,15 @@ This ensures all solutions are automatically pushed to GiHub in the same time us
 
 ## 📂 Project Structure 
 ┣ 📂 edgedriver/ # WebDriver dependency (if used for automation)
+
 ┣ 📂 HackerRank/ # Folder containing solved HackerRank scripts
+
   ┣ 📂 SQL/ # Folder containing solved SQL scripts and commits
+  
 ┣ 📜 script.py # Main Python automation script
+
 ┣ 📜 README.md # Project documentation
+
 
 ## 🛡️ Security & Privacy
 ✅ No Data Collection: no collect or store any of your code or data

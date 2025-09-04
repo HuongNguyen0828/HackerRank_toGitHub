@@ -68,7 +68,10 @@ This ensures all solutions are automatically pushed to GiHub in the same time us
   * In script.py, replace the **remote_url** variable with your repository URL: `remote_url = "https://github.com/YourUsername/YourRepoName"`
 7. **Run the automation script**: run `python script.py`
 
-
 ✅ And, that’s it! Now, you can login and everytime you submit, your HackerRank solutions will now automatically push to GitHub.
+## Future Improvements
+* Multi-Language Support: Currently for SQL, expand to capture and organize C++, Java, JavaScript, etc. solutions
+* Supporting additional web browsers (e.g., Google Chrome, Firefox, Safari)
+* Extending automation to other platforms that don’t natively support saving code to GitHub (e.g., LeetCode).”
      
 

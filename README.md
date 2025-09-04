@@ -72,6 +72,6 @@ This ensures all solutions are automatically pushed to GiHub in the same time us
 ## Future Improvements
 * Multi-Language Support: Currently for SQL, expand to capture and organize C++, Java, JavaScript, etc. solutions
 * Supporting additional web browsers (e.g., Google Chrome, Firefox, Safari)
-* Extending automation to other platforms that don’t natively support saving code to GitHub (e.g., LeetCode).”
+* Extending automation to other platforms that don’t natively support saving code to GitHub (e.g., LeetCode).
      
 

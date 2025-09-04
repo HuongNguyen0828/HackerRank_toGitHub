@@ -9,6 +9,8 @@ This project contains a **Python automation script** that streamlines the proces
 
 This ensures all solutions are automatically pushed to GiHub in the same time users submit the solution in HackerRank, so that your solutions are **version-controlled**, **backed up**, and **easily shareable**.  
 
+You can explore the repository containing **my SQL solutions**, which are automatically committed through this project: [Access HackerRank_Solutions](https://github.com/HuongNguyen0828/HackerRank_solutions).
+
 ---
 
 ## ⚡ Features  
@@ -29,29 +31,27 @@ This ensures all solutions are automatically pushed to GiHub in the same time us
 ---
 
 ## 📂 Project Structure 
-┣ 📂 edgedriver/ # WebDriver dependency (if used for automation)
+┣ 📂 edgedriver/ # WebDriver dependency (if used for automation)  
 
-┣ 📂 HackerRank/ # Folder containing solved HackerRank scripts
+┣ 📂 HackerRank/ # Folder containing solved HackerRank scripts  
 
-      ┣ 📂 SQL/ # Folder containing solved SQL scripts and commits
-  
+      ┣ 📂 SQL/ # Folder containing solved SQL scripts and commits  
+      
 ┣ 📜 script.py # Main Python automation script
 
 ┣ 📜 README.md # Project documentation
 
+--- 
 
 ## 🛡️ Security & Privacy
-✅ No Data Collection: no collect or store any of your code or data
-
-
-
+✅ No Data Collection: no collect or store any of your code or data  
 ✅ Open Source: Full transparency - review our code anytime
+
+---
 
 ## 🚀 How It Works  
 1. Clone this repository into your working folder: `clone https://github.com/HuongNguyen0828/HackerRank_toGitHub/`
 2. 🖥️ Set Up Microsoft Edge WebDriver
-
-
    * **Check your Microsoft Edge version:**  
    [Find your Edge version](https://support.microsoft.com/en-us/microsoft-edge/find-out-which-version-of-microsoft-edge-you-have-c726bee8-c42e-e472-e954-4cf5123497eb)
   * If your version is x86, ** Install msedgedriver.exe file underthe `edgedriver_win32` folder**   
@@ -67,8 +67,10 @@ This ensures all solutions are automatically pushed to GiHub in the same time us
   
   * In script.py, replace the **remote_url** variable with your repository URL: `remote_url = "https://github.com/YourUsername/YourRepoName"`
 7. **Run the automation script**: run `python script.py`
-
 ✅ And, that’s it! Now, you can login and everytime you submit, your HackerRank solutions will now automatically push to GitHub.
+
+---
+
 ## Future Improvements
 * Multi-Language Support: Currently for SQL, expand to capture and organize C++, Java, JavaScript, etc. solutions
 * Supporting additional web browsers (e.g., Google Chrome, Firefox, Safari)

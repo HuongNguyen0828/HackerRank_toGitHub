@@ -145,7 +145,7 @@ try:
 
             # Take the last one
             last_span = breadcrumb_spans[-1]
-            problem_name = last_span.text
+            problem_name = last_span.text.replace(" ", "_")
             filename = problem_name + ".sql"
             print("💾 File will be saved as:", filename)
             # --- 4. Save code --- 
@@ -184,4 +184,5 @@ finally:
         driver.quit()
     except:
         pass
+
     sys.exit(0)

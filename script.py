@@ -80,13 +80,16 @@ try:
         # REVERST button submit to be false
         submit = False # to come back to loop
         # Locate the button by CSS selector
+        
         button_selector = "#codeshell-wrapper > div.clearfix.pmR.pmL.pmB.plT.fixed-hand1.codeshell-footer > div.pull-right > button.btn.btn-primary.bb-submit.ans-submit"
 
         while not submit:
             try:
                 # Wait for the button to be clickable
-                button = WebDriverWait(driver, 20).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, button_selector))
+                button  = WebDriverWait(driver, 10).until(
+                    EC.element_to_be_clickable(
+                    (By.XPATH, "//span[text()='Submit Code']")
+                    )
                 )
                 print("Button is present and clickable.")
 
@@ -118,12 +121,12 @@ try:
             # 2. Wait for CodeMirror editor to load and extract code
             try:
                 code_mirror = WebDriverWait(driver, 20).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, "#codeshell-wrapper .CodeMirror"))
+                    EC.presence_of_element_located((By.CSS_SELECTOR, "div.view-lines"))
                 )
 
                 # Each line of code is usually inside div.CodeMirror-line
             # Get each line's text
-                lines = code_mirror.find_elements(By.CSS_SELECTOR, "div > pre")
+                lines = code_mirror.find_elements(By.CSS_SELECTOR, "div.view-line")
                 code_lines = []
 
                 for line in lines:
@@ -145,12 +148,15 @@ try:
 
             # Take the last one
             last_span = breadcrumb_spans[-1]
-            problem_name = last_span.text.replace(" ", "_")
+            problem_name = last_span.text
             filename = problem_name + ".sql"
             print("💾 File will be saved as:", filename)
             # --- 4. Save code --- 
             # Extract lang: Locate the span inside the container by CSS selector
-            span_element = driver.find_element(By.CSS_SELECTOR, "#s2id_select-lang span")
+            span_element = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, "div.css-ki0glp"))
+            )
             language_text = '--' + span_element.text # adding language as command
 
 
@@ -184,5 +190,4 @@ finally:
         driver.quit()
     except:
         pass
-
     sys.exit(0)

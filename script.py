@@ -141,15 +141,12 @@ try:
 
             # Save code into file solution
             # 1. Extract file_name
-            breadcrumb_spans = driver.find_elements(
-                By.CSS_SELECTOR,
-                "ol.community-breadcrumb li.breadcrumb-item span.breadcrumb-item-text"
-            )
+            breadcrumb_spans = driver.find_elements(By.CSS_SELECTOR, "span.breadcrumb-item-text")
 
             # Take the last one
             last_span = breadcrumb_spans[-1]
-            problem_name = last_span.text
-            filename = problem_name + ".sql"
+            problem_name = last_span.text # extract the last text
+            filename = problem_name.replace(" ", "_") + ".sql"
             print("💾 File will be saved as:", filename)
             # --- 4. Save code --- 
             # Extract lang: Locate the span inside the container by CSS selector
@@ -161,7 +158,7 @@ try:
 
 
             with open(filename, "w", encoding="utf-8") as f: 
-                f.write(language_text) # Adding languange on the top of the file
+                f.write(language_text + "\n") # Adding languange on the top of the file
                 f.write(code_content) 
                 print(f"💾 Saved code to {filename}")
 
@@ -173,10 +170,10 @@ try:
                 print("ℹ️ No changes to commit")
             # Push to correct branch
             try:
-                subprocess.run(["git", "push", "-u", "origin", "master"], check=True)
+                subprocess.run(["git", "push"], check=True)
             except subprocess.CalledProcessError:
                 print("Push failed, trying pull + push...")
-                subprocess.run(["git", "pull", "--rebase", "origin", "master"], check=True)
+                subprocess.run(["git", "pull", "--rebase"], check=True)
                 subprocess.run(["git", "push"], check=True)
             print("🎉 Script finished. Browser will remain open. Press Ctrl+C to exit manually.")
 

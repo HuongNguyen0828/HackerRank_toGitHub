@@ -176,7 +176,7 @@ try:
                 subprocess.run(["git", "push", "-u", "origin", "master"], check=True)
             except subprocess.CalledProcessError:
                 print("Push failed, trying pull + push...")
-                subprocess.run(["git", "pull", "--rebase", "origin", "master"], check=True)
+                subprocess.run(["git", "pull", "--rebase", "origin", "master"], check=True) 
                 subprocess.run(["git", "push"], check=True)
             print("🎉 Script finished. Browser will remain open. Press Ctrl+C to exit manually.")
 
